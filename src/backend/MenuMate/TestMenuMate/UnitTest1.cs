@@ -1,16 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-
 namespace TestMenuMate
 {
-    [TestClass]
     public class UnitTest1
     {
-        [TestMethod]
-        public void TestMethod1()
+        [Fact]
+        public void Test1()
         {
             bool x = true;
-            Assert.IsTrue(x);
+            Assert.True(x);
         }
     }
 }
