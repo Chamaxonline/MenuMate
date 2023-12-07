@@ -28,3 +28,4 @@ jobs:
       working-directory: src/backend/MenuMate
     - name: Test
       run: dotnet test --no-build --verbosity normal
+      working-directory: src/backend/MenuMate/TestMenuMate
