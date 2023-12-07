@@ -22,9 +22,9 @@ jobs:
         dotnet-version: 7.0.x
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: src/backend
+      working-directory: src/backend/MenuMate
     - name: Build
       run: dotnet build --no-restore
-      working-directory: src/backend
+      working-directory: src/backend/MenuMate
     - name: Test
       run: dotnet test --no-build --verbosity normal
