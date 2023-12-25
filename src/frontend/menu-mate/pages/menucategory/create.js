@@ -1,5 +1,7 @@
 import { useState,useEffect } from "react";
 import ApiHandler from "../services/menucategory";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const MyForm = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +21,7 @@ const MyForm = () => {
       [name]: newValue,
     });
   };
+  const notify = () => toast.success('Message sent!');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +33,7 @@ const MyForm = () => {
       api.createData(formData)
       .then(createdData => {
         console.log('Data created:', createdData);
+        toast.success('Menu Category Created!');
         // Perform actions with the created data
       })
       .catch(error => {
@@ -48,6 +52,7 @@ const MyForm = () => {
             <h2 className="font-semibold text-xl text-gray-600">
               Create Menu Category
             </h2>
+            <ToastContainer />
             <p className="text-gray-500 mb-6">
               Enter Your Vehicle Details here.
             </p>

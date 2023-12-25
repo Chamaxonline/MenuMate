@@ -20,7 +20,8 @@ namespace Services.Implementation
 
         public async Task<MenuCategory> Add(MenuCategory menuCategory)
         {
-          return await _repository.Add(menuCategory);
+          var g = await _repository.Add(menuCategory);
+            return g;
         }
     }
 }
