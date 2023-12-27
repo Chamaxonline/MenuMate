@@ -14,13 +14,20 @@ namespace TestMenuMate.ServiceTest
 {
     public  class MenuCategoryServiceTests
     {
+        private Mock<IMenuCategoryRepository> _repositoryMock;
+        private IMenuCategoryService _serviceMock;
+
+        public MenuCategoryServiceTests()
+        {
+            _repositoryMock = new Mock<IMenuCategoryRepository>();
+            _serviceMock = new MenuCategoryService(_repositoryMock.Object);
+        }
+
         [Theory]
         [InlineData("indian","system@gmail.com","indian", "system@gmail.com", true)]
         public async Task Add_ValidMenuCategory_ReturnsAddedMenuCategory(string name1, string createdUser1, string name2, string createdUser2,bool expected)
         {
-            // Arrange
-            var repositoryMock = new Mock<IMenuCategoryRepository>();
-            var menuCategoryService = new MenuCategoryService(repositoryMock.Object);
+           
 
             var menuCategoryToAdd = new MenuCategory
             {
@@ -38,15 +45,54 @@ namespace TestMenuMate.ServiceTest
                 CreatedBy = createdUser2
             };
 
-            repositoryMock.Setup(x => x.Add(It.IsAny<MenuCategory>())).ReturnsAsync(addedMenuCategory);
+            _repositoryMock.Setup(x => x.Add(It.IsAny<MenuCategory>())).ReturnsAsync(addedMenuCategory);
 
             // Act
-            var result = await menuCategoryService.Add(menuCategoryToAdd);
+            var result = await _serviceMock.Add(menuCategoryToAdd);
 
             // Assert
             Assert.NotNull(result);
             Assert.Equal(addedMenuCategory, result);
             // Optionally, add more specific assertions based on your implementation
         }
+
+        [Fact]
+        public async Task Get_ReturnsNull_WhenInvalidIdProvided()
+        {
+            // Arrange
+            int invalidId = -1; // Provide an invalid ID for testing
+           
+            _repositoryMock.Setup(repo => repo.GetById(invalidId)).ReturnsAsync((MenuCategory)null);
+
+            // Act
+            var result = await _serviceMock.Get(invalidId);
+
+            // Assert
+            Assert.Null(result); // Ensure that null is returned for an invalid ID
+        }
+        [Fact]
+        public async Task Get_ReturnsMenuCategory_WhenValidIdProvided()
+        {
+            // Arrange
+            int validId = 1; // Provide a valid ID for testing
+            
+            var expectedMenuCategory = new MenuCategory
+            {
+                Id = validId,
+                // Set other properties as needed for testing
+            };
+
+            _repositoryMock.Setup(repo => repo.GetById(validId)).ReturnsAsync(expectedMenuCategory);
+
+            // Act
+            var result = await _serviceMock.Get(validId);
+
+            // Assert
+            Assert.NotNull(result); // Ensure a result is returned
+            Assert.IsType<MenuCategory>(result); // Ensure the returned result is of type MenuCategory
+            Assert.Equal(validId, result.Id); // Validate if the returned ID matches the expected ID
+            // Add other assertions for properties as needed
+        }
+
     }
 }
