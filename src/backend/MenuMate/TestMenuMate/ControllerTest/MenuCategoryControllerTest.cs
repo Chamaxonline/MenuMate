@@ -50,7 +50,7 @@ namespace TestMenuMate.ControllerTest
             // Optionally, you can assert the returned value as well
             // For example:
             // Assert.Equal(mappedModel, result.Value);
-        }
+        }        
 
     }
 }

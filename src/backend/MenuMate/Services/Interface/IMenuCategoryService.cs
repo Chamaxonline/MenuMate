@@ -10,5 +10,7 @@ namespace Services.Interface
     public interface IMenuCategoryService
     {
         Task<MenuCategory> Add(MenuCategory menuCategory);
+        Task<MenuCategory> Get(int id);
+        Task<IEnumerable<MenuCategory>> GetAll();
     }
 }

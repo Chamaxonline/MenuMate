@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Services.Implementation
 {
-    public class MenuCategoryService:IMenuCategoryService
+    public class MenuCategoryService : IMenuCategoryService
     {
         private readonly IMenuCategoryRepository _repository;
         public MenuCategoryService(IMenuCategoryRepository repository)
@@ -20,8 +20,17 @@ namespace Services.Implementation
 
         public async Task<MenuCategory> Add(MenuCategory menuCategory)
         {
-          var g = await _repository.Add(menuCategory);
-            return g;
+            return await _repository.Add(menuCategory);
+        }
+
+        public async Task<MenuCategory> Get(int id)
+        {
+            return await _repository.GetById(id);
+        }
+
+        public async Task<IEnumerable<MenuCategory>> GetAll()
+        {
+            return await _repository.GetAll();
         }
     }
 }
