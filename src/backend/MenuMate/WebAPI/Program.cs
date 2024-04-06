@@ -39,8 +39,11 @@ builder.Services.AddSingleton(mapper);
 
 builder.Services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped<IMenuCategoryRepository, MenuCategoryRepository>();
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
+
 
 builder.Services.AddScoped<IMenuCategoryService, MenuCategoryService>();
+builder.Services.AddScoped<IItemService, ItemService>();
 
 
 builder.Services.AddDbContext<MenuDbContext>(options =>
