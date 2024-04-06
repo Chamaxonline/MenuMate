@@ -1,14 +1,21 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
+import 'tailwindcss/tailwind.css'
 
 export default function Home() {
   return (
     <div className={styles.container}>
+      <div className='text-red-500d bg-blue-300'>Hello Tailwind</div>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      <button
+                            type="button"
+                            className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                          >
+                            Purple
+                          </button>
       <main>
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>

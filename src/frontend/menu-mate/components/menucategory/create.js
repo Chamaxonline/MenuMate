@@ -1,45 +1,47 @@
-import { useState,useEffect } from "react";
-import ApiHandler from "../services/menucategory";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import ApiHandler from "../../pages/services/menucategory";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import 'tailwindcss/tailwind.css';
 
-const MyForm = () => {
+
+const MenuCategoryCreate = ({ onDataAdded }) => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
-    active: false
+    active: false,
   });
 
   const [api] = useState(new ApiHandler());
 
   const handleChange = (e) => {
-    const { name, value,type,checked } = e.target;
+    const { name, value, type, checked } = e.target;
 
-    const newValue = type === 'checkbox' ? checked : value;
+    const newValue = type === "checkbox" ? checked : value;
 
     setFormData({
       ...formData,
       [name]: newValue,
     });
   };
-  const notify = () => toast.success('Message sent!');
+  const notify = () => toast.success("Message sent!");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Do something with the form data, like sending it to an API endpoint
     console.log(formData);
- 
+
     // For example, if you want to use fetch to send the data
     try {
-      api.createData(formData)
-      .then(createdData => {
-        console.log('Data created:', createdData);
-        toast.success('Menu Category Created!');
-        // Perform actions with the created data
-      })
-      .catch(error => {
-        console.error('Error creating data:', error);
-      });
-      
+      api
+        .createData(formData)
+
+        .then((createdData) => {
+          console.log("Data created:", createdData);
+          toast.success("Menu Category Created!");
+          onDataAdded();
+        });
     } catch (error) {
       console.error("Error submitting form data:", error);
     }
@@ -49,11 +51,11 @@ const MyForm = () => {
       <div className="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
         <div className="container max-w-screen-lg mx-auto">
           <div>
-            <h2 className="font-semibold text-xl text-gray-600">
+            <h2 className="text-3xl font-bold underline">
               Create Menu Category
             </h2>
             <ToastContainer />
-            <p className="text-gray-500 mb-6">
+            <p className="text-3xl font-bold underline">
               Enter Your Vehicle Details here.
             </p>
             <form onSubmit={handleSubmit}>
@@ -72,7 +74,7 @@ const MyForm = () => {
                           type="text"
                           name="name"
                           id="name"
-                          className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                          className="border border-red-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
                           value={formData.name}
                           onChange={handleChange}
                         />
@@ -108,4 +110,4 @@ const MyForm = () => {
   );
 };
 
-export default MyForm;
+export default MenuCategoryCreate;
