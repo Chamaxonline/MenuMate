@@ -12,9 +12,8 @@ class ApiHandler {
   }
 
   async createData(data) {
-    debugger
     try {
-      const response = await this.api.post('',data);
+      const response = await this.api.post('add',data);
       return response.data;
     } catch (error) {
       throw new Error('Error creating data:', error);
@@ -36,6 +35,16 @@ class ApiHandler {
       return response.data;
     } catch (error) {
       throw new Error('Error deleting data:', error);
+    }
+  }
+
+  async getAll(){
+    try {
+      const response = await this.api.get(`getall`);
+      return response.data;
+      
+    } catch (error) {
+      throw new Error('Error GetAll data:', error);
     }
   }
 }
