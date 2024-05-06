@@ -2,16 +2,18 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
 import ApiHandler from "../../pages/services/menucategory";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "tailwindcss/tailwind.css";
+import { Button } from "primereact/button";
+import { Dropdown } from "primereact/dropdown";
+import { InputText } from "primereact/inputtext";
+import { Checkbox } from "primereact/checkbox";
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+import "../../styles/Home.module.css";
 
 const ItemCreate = ({ onDataAdded }) => {
-  const router = useRouter();
-  const [formData, setFormData] = useState({
-    name: "",
-    active: false,
-  });
+  const router = useRouter(); 
   const [isOpen, setIsOpen] = useState(false);
   const customStyles = {
     overlay: {
@@ -24,93 +26,122 @@ const ItemCreate = ({ onDataAdded }) => {
       bottom: "auto",
       marginRight: "-50%",
       transform: "translate(-50%, -50%)",
+      height: "52%",
+      width: "30%",
     },
   };
+
+  const [api] = useState(new ApiHandler());
+  const [categoryList, setData] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    categoryId: selectedCategory,
+    active: false,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.getAll();
+        setData(response);
+        console.log(response);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+    try {
+      api
+        .createData(formData)
+
+        .then((createdData) => {
+          console.log("Item created:", createdData);
+          toast.success("Item Created!");
+          onDataAdded();
+        });
+    } catch (error) {
+      console.error("Error submitting form data:", error);
+    }
+  };
+
   return (
-    <>
-      <div>
-        <button onClick={() => setIsOpen(true)}>Open Modal</button>
-        <Modal
-          isOpen={isOpen}
-          onRequestClose={() => setIsOpen(false)}
-          style={customStyles}
-        >
-          <form class="w-full max-w-lg">
-            <div>
-              <div class="flex flex-wrap -mx-3 mb-6">
-                <div class="w-full md:w-1/1 px-3 mb-6 md:mb-0">
-                  <label
-                    class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-first-name"
-                  >
-                    Name
-                  </label>
-                  <input
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                    id="grid-first-name"
-                    type="text"
-                    placeholder="Jane"
+    <div>
+      <button onClick={() => setIsOpen(true)}>Open Modal</button>
+      <Modal
+        isOpen={isOpen}
+        onRequestClose={() => setIsOpen(false)}
+        style={customStyles}
+      >
+        <form onSubmit={handleSubmit}>
+          <div className="flex align-items-center justify-content-center">
+            <div className="surface-card p-4 shadow-2 border-round w-full h-full">
+              <div className="text-center mb-5">
+                <div className="text-900 text-3xl font-medium mb-3">
+                  Item Create
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="lblName"
+                  className="block text-900 font-medium mb-2"
+                >
+                  Name
+                </label>
+                <InputText
+                  id="name"
+                  type="text"
+                  placeholder="Name"
+                  className="w-full mb-3"
+                  value={formData.name}
+                />
+
+                <label
+                  htmlFor="categoryId"
+                  className="block text-900 font-medium mb-2"
+                >
+                  Category
+                </label>
+                <Dropdown
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.value)}
+                  options={categoryList}
+                  optionLabel="name"
+                  editable
+                  placeholder="Select a Category"
+                  className="w-full mb-3"
+                />
+
+                <div className="flex align-items-center mb-5">
+                  <Checkbox id="rememberme" className="mr-2" />
+                  <label htmlFor="rememberme">Active</label>
+                </div>
+                <div className="flex gap-3 mt-3">
+                  <Button
+                    label="Save"
+                    icon="pi pi-save"
+                    className="flex-2 w-6 mb-3"
                   />
-                  <p class="text-red-500 text-xs italic">
-                    Please fill out this field.
-                  </p>
-                </div>
-              </div>
-              <div class="flex flex-wrap -mx-3 mb-6">
-                <div class="w-full md:w-1/1 px-3 mb-6 md:mb-0">
-                  <label
-                    class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-state"
-                  >
-                    Category
-                  </label>
-                  <div class="relative">
-                    <select
-                      class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="grid-state"
-                    >
-                      <option>New </option>
-                      <option>Missouri</option>
-                      <option>Texas</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                      <svg
-                        class="fill-current h-4 w-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex flex-wrap -mx-3 mb-6">
-                <div class="w-full md:w-1/1 px-3 mb-6 md:mb-0">
-                  <label class="md:w-2/3 block text-gray-500 font-bold">
-                    <input class="mr-2 leading-tight" type="checkbox" />
-                    <span class="text-sm">Active</span>
-                  </label>
-                </div>
-              </div>
-              <div className="flex flex-wrap -mx-3 mb-6">
-                <div className="w-full md:w-1/1 px-3">
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Save
-                  </button>
-
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Cancel
-                  </button>
+                  <Button
+                    label="Reset"
+                    icon="pi pi-undo"
+                    className="flex-2 p-button w-6 mb-3"
+                    severity="danger"
+                  />
                 </div>
               </div>
             </div>
-          </form>
-          <button onClick={() => setIsOpen(false)}>Close Modal</button>
-        </Modal>
-      </div>
-    </>
+          </div>
+        </form>
+      </Modal>
+    </div>
   );
 };
 
