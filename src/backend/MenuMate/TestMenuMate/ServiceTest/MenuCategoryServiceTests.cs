@@ -16,11 +16,12 @@ namespace TestMenuMate.ServiceTest
     {
         private Mock<IMenuCategoryRepository> _repositoryMock;
         private IMenuCategoryService _serviceMock;
+        private IItemRepository _itemRepositoryMock;
 
         public MenuCategoryServiceTests()
         {
             _repositoryMock = new Mock<IMenuCategoryRepository>();
-            _serviceMock = new MenuCategoryService(_repositoryMock.Object);
+            _serviceMock = new MenuCategoryService(_repositoryMock.Object,_itemRepositoryMock);
         }
 
         [Theory]

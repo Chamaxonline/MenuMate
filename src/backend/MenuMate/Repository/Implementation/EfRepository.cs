@@ -73,13 +73,6 @@ namespace Repository.Implementation
         public Task<int> CountWhere(Expression<Func<T, bool>> predicate)
             => Context.Set<T>().CountAsync(predicate);
 
-        //public async Task<T> IAsyncRepository<T>.Add(T entity)
-        //{
-        //   var response =  await Context.Set<T>().AddAsync(entity);
-        //    await Context.SaveChangesAsync();
-        //    return response;
-        //}
-
         #endregion
 
     }

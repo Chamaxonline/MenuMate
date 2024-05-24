@@ -1,4 +1,5 @@
 ﻿using Entity.Models;
+using Entity.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace Services.Interface
         Task<MenuCategory> Add(MenuCategory menuCategory);
         Task<MenuCategory> Get(int id);
         Task<IEnumerable<MenuCategory>> GetAll();
+        Task<MenuCardVM> GetMenuCard();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Entity.Models;
+using Entity.ViewModels;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Repository.Interfaces;
 using Services.Interface;
@@ -13,9 +14,12 @@ namespace Services.Implementation
     public class MenuCategoryService : IMenuCategoryService
     {
         private readonly IMenuCategoryRepository _repository;
-        public MenuCategoryService(IMenuCategoryRepository repository)
+        public readonly IItemRepository _itemRepository;
+        public MenuCategoryService(IMenuCategoryRepository repository, IItemRepository itemRepository)
         {
             _repository = repository;
+            _itemRepository = itemRepository;
+
         }
 
         public async Task<MenuCategory> Add(MenuCategory menuCategory)
@@ -31,6 +35,28 @@ namespace Services.Implementation
         public async Task<IEnumerable<MenuCategory>> GetAll()
         {
             return await _repository.GetAll();
+        }
+
+        public async Task<MenuCardVM> GetMenuCard()
+        {
+            var menuCard = new MenuCardVM();
+            menuCard.MenuItems = new List<MenuItemVM>();
+
+            var CategoryList = await _repository.GetAll();
+
+            foreach (var category in CategoryList)
+            {              
+               var itemList = await _itemRepository.GetItemsByCategoryId(category.Id);
+
+                var menuItem = new MenuItemVM
+                {
+                    Name = category.Name,
+                    MenuId = category.Id,
+                    ItemList = itemList
+                };
+                menuCard.MenuItems.Add(menuItem);
+            }
+            return menuCard;
         }
     }
 }

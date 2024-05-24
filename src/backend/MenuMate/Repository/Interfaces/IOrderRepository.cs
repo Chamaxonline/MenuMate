@@ -1,5 +1,4 @@
 ﻿using Entity.Models;
-using Entity.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Interfaces
 {
-    public interface IItemRepository : IAsyncRepository<Item>
+    public interface IOrderRepository:IAsyncRepository<Order>
     {
-        Task<List<ItemVM>> GetItemsByCategoryId(int categoryId);
     }
 }

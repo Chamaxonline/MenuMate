@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-class ApiHandler {
+class ApiHandlerItem {
   constructor() {
     this.api = axios.create({
       baseURL: 'https://localhost:44349/api/item',
@@ -49,4 +49,4 @@ class ApiHandler {
   }
 }
 
-export default ApiHandler;
+export default ApiHandlerItem;

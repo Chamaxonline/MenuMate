@@ -11,6 +11,7 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "../../styles/Home.module.css";
+import ApiHandlerItem from "../../pages/services/item";
 
 const ItemCreate = ({ onDataAdded }) => {
   const router = useRouter(); 
@@ -31,7 +32,7 @@ const ItemCreate = ({ onDataAdded }) => {
     },
   };
 
-  const [api] = useState(new ApiHandler());
+  const [api] = useState(new ApiHandlerItem());
   const [categoryList, setData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [formData, setFormData] = useState({

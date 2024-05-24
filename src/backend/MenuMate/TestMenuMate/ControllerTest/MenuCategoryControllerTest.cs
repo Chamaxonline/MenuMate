@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Castle.Core.Logging;
 using Entity.Models;
 using Entity.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Services.Interface;
 using System;
@@ -22,8 +24,9 @@ namespace TestMenuMate.ControllerTest
             // Arrange
             var mapperMock = new Mock<IMapper>(); // Assuming _mapper is an IMapper
             var serviceMock = new Mock<IMenuCategoryService>(); // Assuming _service is an IMenuCategoryService
+            var loggerMock = new Mock<ILogger<MenuCategoryController>>();
 
-            var controller = new MenuCategoryController(serviceMock.Object, mapperMock.Object);
+            var controller = new MenuCategoryController(serviceMock.Object, mapperMock.Object, loggerMock.Object);
 
             var modelVM = new MenuCategoryVM
             {
