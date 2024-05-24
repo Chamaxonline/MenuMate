@@ -1,11 +1,13 @@
 using AutoMapper;
 using Entity.Context;
 using Entity.Mappings;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Repository.Implementation;
 using Repository.Interfaces;
+using Serilog;
 using Services.Implementation;
 using Services.Interface;
 
@@ -40,10 +42,14 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped<IMenuCategoryRepository, MenuCategoryRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 
 
 builder.Services.AddScoped<IMenuCategoryService, MenuCategoryService>();
 builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
 
 
 builder.Services.AddDbContext<MenuDbContext>(options =>
@@ -51,6 +57,10 @@ builder.Services.AddDbContext<MenuDbContext>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
+
+builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+
 
 var app = builder.Build();
 
@@ -68,6 +78,8 @@ app.UseCors(options =>
     .AllowAnyHeader()
     .AllowAnyMethod();
 });
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

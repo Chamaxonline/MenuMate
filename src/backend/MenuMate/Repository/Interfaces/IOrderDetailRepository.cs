@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Repository.Interfaces
 {
-    public interface IItemRepository : IAsyncRepository<Item>
+    public interface IOrderDetailRepository:IAsyncRepository<OrderDetail>
     {
-        Task<List<ItemVM>> GetItemsByCategoryId(int categoryId);
+        Task<IEnumerable<OrderDetailVM>> GetAllByOrderId(int orderId);
     }
 }

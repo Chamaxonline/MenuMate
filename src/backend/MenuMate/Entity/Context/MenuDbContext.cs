@@ -13,6 +13,10 @@ namespace Entity.Context
 
         public DbSet<MenuCategory> MenuCategory { get; set; }
         public DbSet<Item> Item { get; set; }
+        public DbSet<Order> Order { get; set; }
+
+        public DbSet<OrderDetail> OrderDetail { get; set; }
+
 
 
 

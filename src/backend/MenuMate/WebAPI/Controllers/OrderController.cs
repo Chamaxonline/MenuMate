@@ -9,12 +9,12 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MenuCategoryController : ControllerBase
+    public class OrderController : ControllerBase
     {
-        private readonly IMenuCategoryService _service;
+        private readonly IOrderService _service;
         private readonly IMapper _mapper;
-        private readonly ILogger<MenuCategoryController> _logger;
-        public MenuCategoryController(IMenuCategoryService service, IMapper mapper, ILogger<MenuCategoryController> logger)
+        private readonly ILogger<OrderController> _logger;
+        public OrderController(IOrderService service, IMapper mapper, ILogger<OrderController> logger)
         {
             _service = service;
             _mapper = mapper;
@@ -22,15 +22,15 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("Add")]
-        public async Task<IActionResult> Add(MenuCategoryVM modelVM)
+        public async Task<IActionResult> Add(OrderVM modelVM)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var model = _mapper.Map<MenuCategory>(modelVM);
+            var model = _mapper.Map<Order>(modelVM);
             model.CreatedBy = "system@gmail.com";
-            _logger.LogInformation("Menu Category get method Starting.");
+            _logger.LogInformation("Order Add method Starting.");
             return Ok(await _service.Add(model));
         }
 
@@ -38,20 +38,13 @@ namespace WebAPI.Controllers
         [Route("Get")]
         public async Task<IActionResult> Get(int id)
         {
-            return Ok(_mapper.Map<MenuCategoryVM>(await _service.Get(id)));
+            return Ok(_mapper.Map<OrderVM>(await _service.Get(id)));
         }
         [HttpGet]
         [Route("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(_mapper.Map<List<MenuCategoryVM>>(await _service.GetAll()));
-        }
-
-        [HttpGet]
-        [Route("GetMenuCard")]
-        public async Task<IActionResult> GetMenuCard()
-        {
-            return Ok(await _service.GetMenuCard());
+            return Ok(_mapper.Map<List<OrderVM>>(await _service.GetAll()));
         }
     }
 }
