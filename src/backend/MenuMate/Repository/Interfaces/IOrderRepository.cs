@@ -1,4 +1,5 @@
-﻿using Entity.Models;
+﻿using Entity.Enums;
+using Entity.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,7 @@ namespace Repository.Interfaces
 {
     public interface IOrderRepository:IAsyncRepository<Order>
     {
+        Task<Order> Update(Order order);
+        Task<Order> UpdateStatus(int id, OrderStatus status);
     }
 }

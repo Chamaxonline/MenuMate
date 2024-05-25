@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Entity.Enums;
 using Entity.Models;
 using Entity.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -40,11 +41,33 @@ namespace WebAPI.Controllers
         {
             return Ok(_mapper.Map<OrderVM>(await _service.Get(id)));
         }
+
         [HttpGet]
         [Route("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(_mapper.Map<List<OrderVM>>(await _service.GetAll()));
+        }
+
+        [HttpPut]
+        [Route("Update")]
+        public async Task<IActionResult> Update(OrderVM modelVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var model = _mapper.Map<Order>(modelVM);
+            model.UpdatedBy = "system@gmail.com";
+            _logger.LogInformation("Order Update method Starting.");
+            return Ok(await _service.Update(model));
+        }
+
+        [HttpPut]
+        [Route("UpdateStatus")]
+        public async Task<IActionResult> UpdateStatus(int id, OrderStatus status)
+        {
+            return Ok(await _service.UpdateStatus(id,status));
         }
     }
 }

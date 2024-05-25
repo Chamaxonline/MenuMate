@@ -4,7 +4,8 @@
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "tailwindcss": "npx tailwindcss -i ./pages/**/*.{js,ts,jsx,tsx} -i ./components/**/*.{js,ts,jsx,tsx} -o ./styles/globals.css --watch"
   },
   "dependencies": {
     "@nextui-org/checkbox": "^2.0.25",

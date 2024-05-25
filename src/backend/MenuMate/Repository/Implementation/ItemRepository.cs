@@ -21,8 +21,7 @@ namespace Repository.Implementation
 
         public async Task<List<ItemVM>> GetItemsByCategoryId(int categoryId)
         {
-            //return await _context.Set<Item>().Where(x=> x.CategoryId == categoryId).ToListAsync();
-            return await (from I in _context.Item.Where(x=> x.CategoryId == categoryId)
+            return await (from I in _context.Item.Where(x => x.CategoryId == categoryId)
                           select new ItemVM
                           {
                               CategoryId = I.CategoryId,
