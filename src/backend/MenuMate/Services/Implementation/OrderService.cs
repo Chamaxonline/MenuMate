@@ -1,4 +1,5 @@
-﻿using Entity.Models;
+﻿using Entity.Enums;
+using Entity.Models;
 using Repository.Interfaces;
 using Services.Interface;
 using System;
@@ -30,6 +31,15 @@ namespace Services.Implementation
         public async Task<IEnumerable<Order>> GetAll()
         {
             return await _repository.GetAll();
+        }
+        public async Task<Order> Update(Order order)
+        {
+            return await _repository.Update(order);
+        }
+
+        public async Task<Order> UpdateStatus(int id, OrderStatus status)
+        {
+            return await _repository.UpdateStatus(id, status);
         }
     }
 }

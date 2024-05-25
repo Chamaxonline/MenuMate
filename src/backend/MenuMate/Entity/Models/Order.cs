@@ -13,7 +13,6 @@ namespace Entity.Models
         [Key]
         public int Id { get; set; }
         public required string Code { get; set; }
-        public int DetailId { get; set; }
         public required OrderStatus Status { get; set; }
     }
 }
