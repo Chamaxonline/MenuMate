@@ -13,6 +13,18 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
   });
 
   const [api] = useState(new ApiHandler());
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const generateCode = () => {
+      return `CAT-${Math.floor(Math.random() * 10000)}`;
+    };
+
+       setFormData((prevData) => ({
+      ...prevData,
+      code: generateCode(),
+    }));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -23,11 +35,32 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
       ...formData,
       [name]: newValue,
     });
+
+    setErrors({
+        ...errors,
+        [name]: "",
+      });
   };
   const notify = () => toast.success("Message sent!");
 
+  const validateForm = () => {
+    let newErrors = {};
+    if (!formData.name) {
+      newErrors.name = "Name is required";
+    } else if (formData.name.length < 3) {
+      newErrors.name = "Name must be at least 3 characters long";
+    }
+    return newErrors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     // Do something with the form data, like sending it to an API endpoint
     console.log(formData);
 
@@ -40,6 +73,7 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
           console.log("Data created:", createdData);
           toast.success("Menu Category Created!");
           onDataAdded();
+          handleReset();
         });
     } catch (error) {
       console.error("Error submitting form data:", error);
@@ -49,10 +83,12 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
   const handleReset = () => {
     setFormData({
       name: "",
-      code: "",
+      //code: "",
       active: false,
     });
+    setErrors({});
   };
+
 
   return (
     <div class="container max-w-screen-lg mx-auto">
@@ -97,7 +133,9 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
                   required=""
                   value={formData.code}
                   onChange={handleChange}
+                  readOnly='true'
                 />
+                
               </div>
               <div className="col-span-6 sm:col-span-3">
                 <label
@@ -111,11 +149,14 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
                   name="name"
                   id="name"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                  placeholder="Electronics"
+                  placeholder="Name"
                   required=""
                   value={formData.name}
                   onChange={handleChange}
                 />
+                {errors.name && (
+                <p className="text-sm text-red-600 mt-1">{errors.name}</p>
+              )}
               </div>
               <div className="col-span-6 sm:col-span-3">
                 <label
