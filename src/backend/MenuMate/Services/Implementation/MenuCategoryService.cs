@@ -51,6 +51,7 @@ namespace Services.Implementation
                 var menuItem = new MenuItemVM
                 {
                     Name = category.Name,
+                    Code = category.Code,
                     MenuId = category.Id,
                     ItemList = itemList
                 };

@@ -11,6 +11,7 @@ namespace Entity.ViewModels
     {
         public int MenuId { get; set; }
         public string Name { get; set; }
+        public string Code { get; set; }
         public List<ItemVM>? ItemList { get; set; }
     }
 }
