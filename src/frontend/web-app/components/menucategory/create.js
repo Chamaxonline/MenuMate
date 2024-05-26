@@ -3,9 +3,6 @@ import { useRouter } from "next/router";
 import ApiHandler from "../../services/menucategory";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "primereact/resources/themes/saga-blue/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
 
 const MenuCategoryCreate = ({ onDataAdded }) => {
   const router = useRouter();

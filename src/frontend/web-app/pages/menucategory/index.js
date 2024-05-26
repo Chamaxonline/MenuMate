@@ -1,7 +1,6 @@
 import MenuCategoryCreate from "../../components/menucategory/create";
 import { useState, useEffect } from "react";
 import ApiHandler from "../../services/menucategory";
-
 import DataTable from "react-data-table-component";
 import UpdateCategory from "@/components/menucategory/update";
 import HyperHeader from "@/components/ui/hyperui/header";

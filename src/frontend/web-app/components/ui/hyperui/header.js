@@ -1,8 +1,10 @@
+import Link from "next/link";
+
 const HyperHeader = () => {
     return (
         <header class="bg-white">
   <div class="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
-    <a class="block text-teal-600" href="#">
+    <Link class="block text-teal-600" href="#">
       <span class="sr-only">Home</span>
       <svg class="h-8" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -10,55 +12,55 @@ const HyperHeader = () => {
           fill="currentColor"
         />
       </svg>
-    </a>
+    </Link>
 
     <div class="flex flex-1 items-center justify-end md:justify-between">
       <nav aria-label="Global" class="hidden md:block">
         <ul class="flex items-center gap-6 text-sm">
         <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Home </a>
+            <Link class="text-gray-500 transition hover:text-gray-500/75" href="#"> Home </Link>
           </li>
           <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="/item"> Item </a>
-          </li>
-
-          <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="/menucategory"> Category </a>
+            <Link class="text-gray-500 transition hover:text-gray-500/75" href="/item"> Item </Link>
           </li>
 
           <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> History </a>
+            <Link class="text-gray-500 transition hover:text-gray-500/75" href="/menucategory"> Category </Link>
           </li>
 
           <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Services </a>
+            <Link class="text-gray-500 transition hover:text-gray-500/75" href="#"> History </Link>
           </li>
 
           <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Projects </a>
+            <Link class="text-gray-500 transition hover:text-gray-500/75" href="#"> Services </Link>
           </li>
 
           <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Blog </a>
+            <Link class="text-gray-500 transition hover:text-gray-500/75" href="#"> Projects </Link>
+          </li>
+
+          <li>
+            <Link class="text-gray-500 transition hover:text-gray-500/75" href="#"> Blog </Link>
           </li>
         </ul>
       </nav>
 
       <div class="flex items-center gap-4">
         <div class="sm:flex sm:gap-4">
-          <a
+          <Link
             class="block rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700"
             href="#"
           >
             Login
-          </a>
+          </Link>
 
-          <a
+          <Link
             class="hidden rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75 sm:block"
             href="#"
           >
             Register
-          </a>
+          </Link>
         </div>
 
         <button
