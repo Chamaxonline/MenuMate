@@ -47,6 +47,16 @@ class ApiHandler {
       throw new Error('Error GetAll data:', error);
     }
   }
+
+  async getLastId(){
+    try {
+      const response = await this.api.get(`GetLastId`);
+      return response.data;
+      
+    } catch (error) {
+      throw new Error('Error GetAll data:', error);
+    }
+  }
 }
 
 export default ApiHandler;
