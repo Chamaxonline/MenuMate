@@ -53,5 +53,12 @@ namespace WebAPI.Controllers
         {
             return Ok(await _service.GetMenuCard());
         }
+
+        [HttpGet]
+        [Route("GetLastId")]
+        public async Task<IActionResult> GetLastId()
+        {
+            return Ok(await _service.GetLastId());
+        }
     }
 }

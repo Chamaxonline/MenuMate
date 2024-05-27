@@ -14,5 +14,6 @@ namespace Services.Interface
         Task<MenuCategory> Get(int id);
         Task<IEnumerable<MenuCategory>> GetAll();
         Task<MenuCardVM> GetMenuCard();
+        Task<int> GetLastId();
     }
 }

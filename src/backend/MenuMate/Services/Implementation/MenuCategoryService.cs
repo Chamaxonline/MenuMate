@@ -59,5 +59,10 @@ namespace Services.Implementation
             }
             return menuCard;
         }
+
+        public async Task<int> GetLastId()
+        {
+            return await _repository.GetLastId();
+        }
     }
 }
