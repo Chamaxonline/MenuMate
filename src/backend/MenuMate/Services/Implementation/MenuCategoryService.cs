@@ -1,5 +1,6 @@
 ﻿using Entity.Models;
 using Entity.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Repository.Interfaces;
 using Services.Interface;
@@ -30,6 +31,14 @@ namespace Services.Implementation
         public async Task<MenuCategory> Get(int id)
         {
             return await _repository.GetById(id);
+        }
+
+        public async Task<MenuCategory> Update(MenuCategory menuCategory)
+        {
+            var oldCategory = await _repository.GetById(menuCategory.Id);
+            menuCategory.CreatedDate = oldCategory.CreatedDate;
+            menuCategory.CreatedBy = oldCategory.CreatedBy;
+            return await _repository.Update(menuCategory);
         }
 
         public async Task<IEnumerable<MenuCategory>> GetAll()
