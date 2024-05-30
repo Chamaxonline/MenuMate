@@ -1,24 +1,24 @@
-import MenuCategoryCreate from "../../components/menucategory/create";
 import { useState, useEffect } from "react";
 import ApiHandler from "../../services/menucategory";
 import DataTable from "react-data-table-component";
-import UpdateCategory from "@/components/menucategory/editmodal";
+import MenuCategoryCreate from "../../components/menucategory/create";
+import EditModal from "../../components/menucategory/editmodal";
 import HyperHeader from "@/components/ui/hyperui/header";
 import HyperFooter from "@/components/ui/hyperui/footer";
-import EditModal from "@/components/menucategory/editmodal";
 
 const MenuCategoryPage = () => {
   const [api] = useState(new ApiHandler());
   const [apiData, setApiData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const fetchData = async () => {
     setLoading(true);
     try {
       const data = await api.getAll();
       setApiData(data);
+      console.log(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -49,10 +49,9 @@ const MenuCategoryPage = () => {
     fetchData(); // Refresh data after new data is added
   };
 
-  const handleEdit = (row) => {
-    debugger;
+  const handleEdit = (category) => {
+    setSelectedCategory(category);
     setIsEditModalOpen(true);
-    setSelectedCategory(row);
   };
 
   const handleModalClose = () => {
@@ -72,7 +71,7 @@ const MenuCategoryPage = () => {
             pagination
             progressPending={loading}
             progressComponent={
-              <div class="w-36 h-36 border-8 rounded-full border-t-lime-400 animate-spin" />
+              <div className="w-36 h-36 border-8 rounded-full border-t-lime-400 animate-spin" />
             }
           />
         </div>

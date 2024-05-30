@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import ApiHandler from "../../services/menucategory";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import 'tailwindcss/tailwind.css';
 
 const MenuCategoryCreate = ({ onDataAdded }) => {
   const router = useRouter();
@@ -14,23 +15,22 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
 
   const [api] = useState(new ApiHandler());
   const [errors, setErrors] = useState({});
-  let lastId;
 
   useEffect(() => {
-    const generateCode = async () => {
-      return `CAT-${await getIndexCount() + 1}`;
-    };
-
-    const setCode = async () => {
-      const code = await generateCode();
-      setFormData((prevData) => ({
-        ...prevData,
-        code: code,
-      }));
-    };
-
     setCode();
   }, []);
+
+  const generateCode = async () => {
+    return `CAT-${(await getIndexCount()) + 1}`;
+  };
+
+  const setCode = async () => {
+    const code = await generateCode();
+    setFormData((prevData) => ({
+      ...prevData,
+      code: code,
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -67,17 +67,12 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
       setErrors(validationErrors);
       return;
     }
-
-    // Do something with the form data, like sending it to an API endpoint
-    console.log(formData);
-
-    // For example, if you want to use fetch to send the data
     try {
       api.createData(formData).then((createdData) => {
-        console.log("Data created:", createdData);
         toast.success("Menu Category Created!");
         onDataAdded();
         handleReset();
+        setCode();
       });
     } catch (error) {
       console.error("Error submitting form data:", error);
@@ -87,8 +82,6 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
   const getIndexCount = async () => {
     try {
       const data = await api.getLastId();
-      lastId = data;
-      console.log(data);
       return data;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -102,6 +95,7 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
       active: false,
     });
     setErrors({});
+    setCode();
   };
 
   return (
@@ -177,7 +171,7 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
                 className="text-sm font-medium text-gray-900 block mb-2"
               >
                 <input
-                  checked={formData.active}
+                  checked
                   type="checkbox"
                   name="active"
                   id="active"
