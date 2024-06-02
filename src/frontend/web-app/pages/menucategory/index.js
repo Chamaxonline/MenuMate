@@ -57,7 +57,7 @@ const MenuCategoryPage = () => {
 
   const handleModalClose = () => {
     setIsEditModalOpen(false);
-    setSelectedCategory(null);
+   // setSelectedCategory(null);
   };
 
   return (

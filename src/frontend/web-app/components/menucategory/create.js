@@ -167,7 +167,7 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
             </div>
             <div className="col-span-6 sm:col-span-3">
               <label
-                htmlFor="animal-dog"
+                htmlFor="active"
                 className="text-sm font-medium text-gray-900 block mb-2"
               >
                 <input
