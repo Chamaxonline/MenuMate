@@ -12,7 +12,9 @@ namespace Services.Interface
     {
         Task<MenuCategory> Add(MenuCategory menuCategory);
         Task<MenuCategory> Get(int id);
+        Task<MenuCategory> Update(MenuCategory menuCategory);
         Task<IEnumerable<MenuCategory>> GetAll();
         Task<MenuCardVM> GetMenuCard();
+        Task<int> GetLastId();
     }
 }

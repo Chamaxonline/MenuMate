@@ -19,6 +19,11 @@ namespace Repository.Implementation
         {
             _context = context;
         }
+
+        public async Task<int>GetLastId()
+        {
+            return await _context.Set<MenuCategory>().CountAsync();
+        }
        
     }
 }
