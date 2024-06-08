@@ -34,11 +34,19 @@ namespace WebAPI.Controllers
         {
             return Ok(_mapper.Map<ItemVM>(await _service.Get(id)));
         }
+
         [HttpGet]
         [Route("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(_mapper.Map<List<ItemVM>>(await _service.GetAll()));
+        }
+
+        [HttpGet]
+        [Route("GetLastId")]
+        public async Task<IActionResult> GetLastId()
+        {
+            return Ok(await _service.GetLastId());
         }
     }
 }
