@@ -31,5 +31,9 @@ namespace Services.Implementation
         {
             return await _repository.GetAll();
         }
+        public async Task<int> GetLastId()
+        {
+            return await _repository.GetLastId();
+        }
     }
 }

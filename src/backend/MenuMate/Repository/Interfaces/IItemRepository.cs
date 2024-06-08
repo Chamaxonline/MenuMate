@@ -11,5 +11,6 @@ namespace Repository.Interfaces
     public interface IItemRepository : IAsyncRepository<Item>
     {
         Task<List<ItemVM>> GetItemsByCategoryId(int categoryId);
+        Task<int> GetLastId();
     }
 }

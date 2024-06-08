@@ -20,9 +20,9 @@ class ApiHandler {
     }
   }
 
-  async updateData(id, updatedData) {
+  async updateData(updatedData) {
     try {
-      const response = await this.api.put(`endpoint/${id}`, updatedData);
+      const response = await this.api.put(`update`, updatedData);
       return response.data;
     } catch (error) {
       throw new Error('Error updating data:', error);

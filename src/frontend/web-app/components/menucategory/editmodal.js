@@ -50,7 +50,7 @@ const EditModal = ({ isOpen, onClose, categoryData, onCategoryUpdated }) => {
       return;
     }
     try {
-      await api.updateData(formData.id, formData);
+      await api.updateData(formData);
       toast.success("Menu Category Updated!");
       onCategoryUpdated();
       onClose();
