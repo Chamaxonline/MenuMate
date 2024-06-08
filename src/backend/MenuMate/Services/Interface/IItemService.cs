@@ -12,5 +12,6 @@ namespace Services.Interface
         Task<Item> Add(Item item);
         Task<Item> Get(int id);
         Task<IEnumerable<Item>> GetAll();
+        Task<int> GetLastId();
     }
 }
