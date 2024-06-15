@@ -27,7 +27,8 @@ namespace Repository.Implementation
                               CategoryId = I.CategoryId,
                               Active = I.Active,
                               Id = I.Id,
-                              Name = I.Name
+                              Name = I.Name,
+                              Code = I.Code,
                           }).ToListAsync();
         }
 
