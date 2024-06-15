@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import ItemService from "../../services/item";
 import ApiHandler from "../../services/menucategory";
 import { ToastContainer, toast } from "react-toastify";
+import Select from "react-select";
 import "react-toastify/dist/ReactToastify.css";
 import "tailwindcss/tailwind.css";
 
@@ -13,6 +14,7 @@ const ItemCreate = ({ onDataAdded }) => {
     name: "",
     code: "",
     active: false,
+    categoryId: null,
   });
 
   const [api] = useState(new ItemService());
@@ -28,14 +30,12 @@ const ItemCreate = ({ onDataAdded }) => {
   }, [menuService]);
 
   const fetchData = async () => {
-    // setLoading(true);
     try {
       const data = await menuService.getAll();
-      setApiData(data.filter(x=> x.active == true));
+      setApiData(data.filter((x) => x.active == true));
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-    //  setLoading(false);
   };
 
   const generateCode = async () => {
@@ -52,7 +52,6 @@ const ItemCreate = ({ onDataAdded }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
     const newValue = type === "checkbox" ? checked : value;
 
     setFormData({
@@ -66,6 +65,17 @@ const ItemCreate = ({ onDataAdded }) => {
     });
   };
 
+  const handleCategoryChange = (selectedOption) => {
+    setFormData({
+      ...formData,
+      categoryId: selectedOption ? selectedOption.value : null,
+    });
+    setErrors({
+      ...errors,
+      categoryId: "",
+    });
+  };
+
   const notify = () => toast.success("Message sent!");
 
   const validateForm = () => {
@@ -74,6 +84,9 @@ const ItemCreate = ({ onDataAdded }) => {
       newErrors.name = "Name is required";
     } else if (formData.name.length < 3) {
       newErrors.name = "Name must be at least 3 characters long";
+    }
+    if (!formData.categoryId) {
+      newErrors.categoryId = "Category is required";
     }
     return newErrors;
   };
@@ -87,8 +100,8 @@ const ItemCreate = ({ onDataAdded }) => {
     }
     try {
       api.createData(formData).then((createdData) => {
-        toast.success("Menu Category Created!");
-        onDataAdded();
+        toast.success("Item Created!");
+        //onDataAdded();
         handleReset();
         setCode();
       });
@@ -111,6 +124,8 @@ const ItemCreate = ({ onDataAdded }) => {
       name: "",
       code: "",
       active: false,
+      categoryId: null,
+      apiData:null
     });
     setErrors({});
     setCode();
@@ -136,7 +151,7 @@ const ItemCreate = ({ onDataAdded }) => {
               >
                 <path
                   fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 011.414 1.414L11.414 10l4.293 4.293a1 1 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
                   clipRule="evenodd"
                 ></path>
               </svg>
@@ -186,37 +201,38 @@ const ItemCreate = ({ onDataAdded }) => {
               </div>
               <div className="col-span-6 sm:col-span-3">
                 <label
-                  for="category"
-                  class="block text-gray-700 font-medium mb-2"
+                  htmlFor="category"
+                  className="block text-gray-700 font-medium mb-2"
                 >
                   Category
                 </label>
-                <select
+                <Select
                   id="category"
                   name="category"
-                  class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                  required
-                >
-                  {apiData.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
+                  options={apiData.map((item) => ({
+                    value: item.id,
+                    label: item.name,
+                  }))}
+                  value={apiData.category}
+                  onChange={handleCategoryChange}
+                  placeholder="Select a category"
+                  className="border border-gray-400 rounded-lg focus:outline-none focus:border-blue-400"
+                />
+                {errors.categoryId && (
+                  <p className="text-sm text-red-600 mt-1">{errors.categoryId}</p>
+                )}
               </div>
-
               <div className="col-span-6 sm:col-span-3">
                 <label
-                  htmlFor="animal-dog"
+                  htmlFor="active"
                   className="text-sm font-medium text-gray-900 block mb-2"
                 >
                   <input
-                    checked
+                    checked={formData.active}
                     type="checkbox"
                     name="active"
                     id="active"
                     className="mr-2"
-                    value={formData.active}
                     onChange={handleChange}
                   />
                   Active
@@ -243,4 +259,5 @@ const ItemCreate = ({ onDataAdded }) => {
     </>
   );
 };
+
 export default ItemCreate;
