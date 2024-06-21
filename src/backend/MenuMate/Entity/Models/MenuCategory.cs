@@ -12,5 +12,6 @@ namespace Entity.Models
         public string Name { get; set; }
         public string Code { get; set; }
         public bool Active { get; set; }
+        public ICollection<Item> Items { get; set; }
     }
 }

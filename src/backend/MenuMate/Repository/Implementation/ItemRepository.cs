@@ -18,6 +18,12 @@ namespace Repository.Implementation
         {
             _context = context;
         }
+        public virtual async Task<List<Item>> GetAll()
+        {
+            return await Context.Set<Item>()
+                                .Include(i => i.Category)
+                               .ToListAsync();
+        }
 
         public async Task<List<ItemVM>> GetItemsByCategoryId(int categoryId)
         {
