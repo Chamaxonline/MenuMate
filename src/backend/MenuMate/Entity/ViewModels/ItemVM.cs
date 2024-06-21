@@ -15,6 +15,7 @@ namespace Entity.ViewModels
         public string Name { get; set; }
         public string Code { get; set; }
         public int? CategoryId { get; set; }
+        public MenuCategory? Category { get; set; }
         public bool Active { get; set; }
     }
 

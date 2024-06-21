@@ -1,4 +1,5 @@
 ﻿using Entity.Models;
+using Entity.ViewModels;
 using Repository.Interfaces;
 using Services.Interface;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Services.Implementation
 {
-    public class ItemService:IItemService
+    public class ItemService : IItemService
     {
         private readonly IItemRepository _repository;
         public ItemService(IItemRepository repository)
