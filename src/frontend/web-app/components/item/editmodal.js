@@ -1,54 +1,26 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import ItemService from "../../services/item";
-import ApiHandler from "../../services/menucategory";
 import { ToastContainer, toast } from "react-toastify";
-import Select from "react-select";
 import "react-toastify/dist/ReactToastify.css";
-import "tailwindcss/tailwind.css";
+import ApiHandler from "../../services/item";
+import CategoryApiHandler from "../../services/menucategory"
+import Select from "react-select";
 
-const ItemCreate = ({ onDataAdded }) => {
-  const router = useRouter();
-  const [apiData, setApiData] = useState([]);
+const EditItemModal = ({ isOpen, onClose, itemData, onItemUpdated }) => {
   const [formData, setFormData] = useState({
     name: "",
     code: "",
     active: false,
-    categoryId: null,
+    id: null,
+    categoryId: null
   });
-
-  const [api] = useState(new ItemService());
-  const [menuService] = useState(new ApiHandler());
+  const [api] = useState(new ApiHandler());
   const [errors, setErrors] = useState({});
+  const [apiData, setApiData] = useState([]);
+  const [menuService] = useState(new CategoryApiHandler());
 
   useEffect(() => {
-    setCode();
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [menuService]);
-
-  const fetchData = async () => {
-    try {
-      const data = await menuService.getAll();
-      setApiData(data.filter((x) => x.active == true));
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const generateCode = async () => {
-    return `ITM-${(await getIndexCount()) + 1}`;
-  };
-
-  const setCode = async () => {
-    const code = await generateCode();
-    setFormData((prevData) => ({
-      ...prevData,
-      code: code,
-    }));
-  };
+    setFormData(itemData);
+  }, [itemData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -65,18 +37,18 @@ const ItemCreate = ({ onDataAdded }) => {
     });
   };
 
-  const handleCategoryChange = (selectedOption) => {
-    setFormData({
-      ...formData,
-      categoryId: selectedOption ? selectedOption.value : null,
-    });
-    setErrors({
-      ...errors,
-      categoryId: "",
-    });
-  };
+  useEffect(() => {
+    fetchData();
+  }, [menuService]);
 
-  const notify = () => toast.success("Message sent!");
+  const fetchData = async () => {
+    try {
+      const data = await menuService.getAll();
+      setApiData(data.filter((x) => x.active == true));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const validateForm = () => {
     let newErrors = {};
@@ -84,9 +56,6 @@ const ItemCreate = ({ onDataAdded }) => {
       newErrors.name = "Name is required";
     } else if (formData.name.length < 3) {
       newErrors.name = "Name must be at least 3 characters long";
-    }
-    if (!formData.categoryId) {
-      newErrors.categoryId = "Category is required";
     }
     return newErrors;
   };
@@ -99,50 +68,36 @@ const ItemCreate = ({ onDataAdded }) => {
       return;
     }
     try {
-      api.createData(formData).then((createdData) => {
-        toast.success("Item Created!");
-        onDataAdded();
-        handleReset();
-        setCode();
-      });
+      await api.updateData(formData);
+      toast.success("Menu Category Updated!");
+      onItemUpdated();
+      onClose();
     } catch (error) {
-      console.error("Error submitting form data:", error);
+      console.error("Error updating category:", error);
     }
   };
 
-  const getIndexCount = async () => {
-    try {
-      const data = await api.getLastId();
-      return data;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const handleReset = () => {
+  const handleCategoryChange = (selectedOption) => {
     setFormData({
       ...formData,
-      name: "",
-      code: "",
-      active: false,
-      category:null
+      categoryId: selectedOption ? selectedOption.value : null,
     });
-    setErrors({});
-    fetchData();
-    setCode();
+    setErrors({
+      ...errors,
+      categoryId: "",
+    });
   };
 
   return (
-    <>
-      <div className="container max-w-screen-lg mx-auto">
-        <ToastContainer />
+    isOpen && (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
         <div className="bg-white border border-1 rounded-lg shadow relative m-10">
           <div className="flex items-start justify-between p-5 border-b rounded-t">
-            <h3 className="text-xl font-semibold">Create Item</h3>
+            <h3 className="text-xl font-semibold">Edit Category</h3>
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-              data-modal-toggle="product-modal"
+              onClick={onClose}
             >
               <svg
                 className="w-5 h-5"
@@ -152,7 +107,7 @@ const ItemCreate = ({ onDataAdded }) => {
               >
                 <path
                   fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 011.414 1.414L11.414 10l4.293 4.293a1 1 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
                   clipRule="evenodd"
                 ></path>
               </svg>
@@ -172,14 +127,12 @@ const ItemCreate = ({ onDataAdded }) => {
                   name="code"
                   id="code"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                  placeholder="Apple Imac 27”"
-                  required=""
+                  required
                   value={formData.code}
-                  onChange={handleChange}
-                  readOnly={true}
+                  readOnly
                 />
               </div>
-              <div className="col-span-6 sm:col-span-3">
+              <div className="col-span-6 sm:col-span-6">
                 <label
                   htmlFor="name"
                   className="text-sm font-medium text-gray-900 block mb-2"
@@ -191,8 +144,7 @@ const ItemCreate = ({ onDataAdded }) => {
                   name="name"
                   id="name"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                  placeholder="Name"
-                  required=""
+                  required
                   value={formData.name}
                   onChange={handleChange}
                 />
@@ -200,7 +152,7 @@ const ItemCreate = ({ onDataAdded }) => {
                   <p className="text-sm text-red-600 mt-1">{errors.name}</p>
                 )}
               </div>
-              <div className="col-span-6 sm:col-span-3">
+              <div className="col-span-6 sm:col-span-6">
                 <label
                   htmlFor="category"
                   className="block text-gray-700 font-medium mb-2"
@@ -214,15 +166,13 @@ const ItemCreate = ({ onDataAdded }) => {
                     value: item.id,
                     label: item.name,
                   }))}
-                  value={formData.category}
+                  value={apiData.category}
                   onChange={handleCategoryChange}
                   placeholder="Select a category"
                   className="border border-gray-400 rounded-lg focus:outline-none focus:border-blue-400"
                 />
                 {errors.categoryId && (
-                  <p className="text-sm text-red-600 mt-1">
-                    {errors.categoryId}
-                  </p>
+                  <p className="text-sm text-red-600 mt-1">{errors.categoryId}</p>
                 )}
               </div>
               <div className="col-span-6 sm:col-span-3">
@@ -231,11 +181,11 @@ const ItemCreate = ({ onDataAdded }) => {
                   className="text-sm font-medium text-gray-900 block mb-2"
                 >
                   <input
-                    checked={formData.active}
                     type="checkbox"
                     name="active"
                     id="active"
                     className="mr-2"
+                    checked={formData.active}
                     onChange={handleChange}
                   />
                   Active
@@ -248,19 +198,19 @@ const ItemCreate = ({ onDataAdded }) => {
               className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               onClick={handleSubmit}
             >
-              Submit
+              Update
             </button>
             <button
               className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              onClick={handleReset}
+              onClick={onClose}
             >
-              Reset
+              Cancel
             </button>
           </div>
         </div>
       </div>
-    </>
+    )
   );
 };
 
-export default ItemCreate;
+export default EditItemModal;

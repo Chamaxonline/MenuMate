@@ -4,11 +4,14 @@ import ItemCreate from "@/components/item/create";
 import HyperHeader from "@/components/ui/hyperui/header";
 import HyperFooter from "@/components/ui/hyperui/footer";
 import DataTable from "react-data-table-component";
+import EditItemModal from "@/components/item/editmodal";
 
 const ItemCreatePage = () => {
   const [api] = useState(new ItemService());
   const [apiData, setApiData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedItem, setSelectedItem] = useState([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleDataAdded = () => {
     fetchData(); // Refresh data after new data is added
@@ -18,7 +21,8 @@ const ItemCreatePage = () => {
     setLoading(true);
     try {
       const data = await api.getAll();
-      setApiData(data);
+      const sortedData = data.sort((a, b) => b.Id - a.Id);
+    setApiData(sortedData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -29,14 +33,19 @@ const ItemCreatePage = () => {
     fetchData();
   }, [api]);
 
+  const handleEdit = (row) => {
+    setIsEditModalOpen(true);
+    setSelectedItem(row);
+  };
+
   const handleModalClose = () => {
     setIsEditModalOpen(false);
-   // setSelectedCategory(null);
   };
 
   const columns = [
     { name: "Code", selector: (row) => row.code },
     { name: "Name", selector: (row) => row.name },
+    {name:"Category",selector: (row) => row.category.name},
     {
       name: "Actions",
       cell: (row) => (
@@ -69,6 +78,12 @@ const ItemCreatePage = () => {
         </div>
       </div>
       <HyperFooter />
+      <EditItemModal
+        isOpen={isEditModalOpen}
+        onClose={handleModalClose}
+        itemData={selectedItem}
+        onItemUpdated={fetchData}
+      />
     </>
   );
 };
