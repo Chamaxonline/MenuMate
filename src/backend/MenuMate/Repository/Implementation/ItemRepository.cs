@@ -22,6 +22,7 @@ namespace Repository.Implementation
         {
             return await Context.Set<Item>()
                                 .Include(i => i.Category)
+                                .OrderByDescending(i => i.Id)
                                .ToListAsync();
         }
 
