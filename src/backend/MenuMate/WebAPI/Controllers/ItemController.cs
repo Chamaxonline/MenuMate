@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Entity.Models;
 using Entity.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
@@ -13,9 +14,11 @@ namespace WebAPI.Controllers
     {
         private readonly IItemService _service;
         private readonly IMapper _mapper;
-        public ItemController(IItemService service, IMapper mapper)
+        private readonly IMenuCategoryService _menuCategoryService;
+        public ItemController(IItemService service, IMapper mapper, IMenuCategoryService menuCategoryService)
         {
             _service = service;
+            _menuCategoryService = menuCategoryService;
             _mapper = mapper;
 
         }

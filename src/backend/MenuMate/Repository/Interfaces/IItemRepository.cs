@@ -12,5 +12,6 @@ namespace Repository.Interfaces
     {
         Task<List<ItemVM>> GetItemsByCategoryId(int categoryId);
         Task<int> GetLastId();
+        Task<List<Item>> GetAll();
     }
 }
