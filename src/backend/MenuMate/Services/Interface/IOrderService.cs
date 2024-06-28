@@ -15,5 +15,6 @@ namespace Services.Interface
         Task<IEnumerable<Order>> GetAll();
         Task<Order> Update(Order order);
         Task<Order> UpdateStatus(int id, OrderStatus status);
+        Task<int> GetLastId();
     }
 }

@@ -69,5 +69,12 @@ namespace WebAPI.Controllers
         {
             return Ok(await _service.UpdateStatus(id,status));
         }
+
+        [HttpGet]
+        [Route("GetLastId")]
+        public async Task<IActionResult> GetLastId()
+        {
+            return Ok(await _service.GetLastId());
+        }
     }
 }
