@@ -50,7 +50,6 @@ const MenuCategoryPage = () => {
   };
 
   const handleEdit = (row) => {
-    debugger;
     setIsEditModalOpen(true);
     setSelectedCategory(row);
   };
