@@ -41,5 +41,10 @@ namespace Services.Implementation
         {
             return await _repository.UpdateStatus(id, status);
         }
+
+        public async Task<int> GetLastId()
+        {
+            return await _repository.GetLastId();
+        }
     }
 }

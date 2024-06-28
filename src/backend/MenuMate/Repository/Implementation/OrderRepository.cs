@@ -29,5 +29,10 @@ namespace Repository.Implementation
             await _context.SaveChangesAsync();
             return order;
         }
+
+        public async Task<int> GetLastId()
+        {
+            return await _context.Set<Item>().CountAsync();
+        }
     }
 }
