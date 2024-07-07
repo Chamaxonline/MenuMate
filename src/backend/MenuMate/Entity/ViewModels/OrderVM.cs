@@ -14,7 +14,7 @@ namespace Entity.ViewModels
     {
         public int? Id { get; set; }
         public required string Code { get; set; }
-        public int DetailId { get; set; }
+        public OrderType Type { get; set; }
         public required OrderStatus Status { get; set; }
     }
 
