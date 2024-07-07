@@ -12,5 +12,6 @@ namespace Repository.Interfaces
     {
         Task<Order> Update(Order order);
         Task<Order> UpdateStatus(int id, OrderStatus status);
+        Task<int> GetLastId();
     }
 }
