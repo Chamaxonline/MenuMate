@@ -5,6 +5,8 @@ import HyperHeader from "@/components/ui/hyperui/header";
 import HyperFooter from "@/components/ui/hyperui/footer";
 import DataTable from "react-data-table-component";
 import EditItemModal from "@/components/item/editmodal";
+import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';   
+import { Button } from 'primereact/button';   
 
 const ItemCreatePage = () => {
   const [api] = useState(new ItemService());
@@ -62,8 +64,10 @@ const ItemCreatePage = () => {
   
   return (
     <>
-      <HyperHeader />
+    
       <div className="container max-w-screen-lg mx-auto">
+      <PrimeReactProvider></PrimeReactProvider>
+        
         <ItemCreate onDataAdded={handleDataAdded} />
         <div className="bg-white border border-1 rounded-lg shadow relative m-10">
           <DataTable
@@ -77,7 +81,6 @@ const ItemCreatePage = () => {
           />
         </div>
       </div>
-      <HyperFooter />
       <EditItemModal
         isOpen={isEditModalOpen}
         onClose={handleModalClose}

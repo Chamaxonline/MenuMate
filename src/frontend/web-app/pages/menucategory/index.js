@@ -2,10 +2,8 @@ import MenuCategoryCreate from "../../components/menucategory/create";
 import { useState, useEffect } from "react";
 import ApiHandler from "../../services/menucategory";
 import DataTable from "react-data-table-component";
-import UpdateCategory from "@/components/menucategory/editmodal";
-import HyperHeader from "@/components/ui/hyperui/header";
-import HyperFooter from "@/components/ui/hyperui/footer";
 import EditModal from "@/components/menucategory/editmodal";
+import { PrimeReactProvider, PrimeReactContext } from 'primereact/api'; 
 
 const MenuCategoryPage = () => {
   const [api] = useState(new ApiHandler());
@@ -61,7 +59,7 @@ const MenuCategoryPage = () => {
 
   return (
     <>
-      <HyperHeader />
+     <PrimeReactProvider>
       <div className="container max-w-screen-lg mx-auto">
         <MenuCategoryCreate onDataAdded={handleDataAdded} />
         <div className="bg-white border border-1 rounded-lg shadow relative m-10">
@@ -76,13 +74,14 @@ const MenuCategoryPage = () => {
           />
         </div>
       </div>
-      <HyperFooter />
+     
       <EditModal
         isOpen={isEditModalOpen}
         onClose={handleModalClose}
         categoryData={selectedCategory}
         onCategoryUpdated={fetchData}
       />
+      </PrimeReactProvider>
     </>
   );
 };

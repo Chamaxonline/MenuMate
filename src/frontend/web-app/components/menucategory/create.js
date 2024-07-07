@@ -2,8 +2,15 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import ApiHandler from "../../services/menucategory";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import 'tailwindcss/tailwind.css';
+// import "react-toastify/dist/ReactToastify.css";
+// import 'tailwindcss/tailwind.css';
+import { generateCode } from "@/utils/codeGenerator";
+import 'primeicons/primeicons.css';
+import 'primeflex/primeflex.css';  
+import 'primereact/resources/primereact.css';
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import { InputText } from "primereact/inputtext";
+import { Checkbox } from "primereact/checkbox";
 
 const MenuCategoryCreate = ({ onDataAdded }) => {
   const router = useRouter();
@@ -20,12 +27,9 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
     setCode();
   }, []);
 
-  const generateCode = async () => {
-    return `CAT-${(await getIndexCount()) + 1}`;
-  };
-
-  const setCode = async () => {
-    const code = await generateCode();
+    const setCode = async () => {
+    const tableId = await getIndexCount() + 1  
+    const code = await generateCode('CAT',tableId);
     setFormData((prevData) => ({
       ...prevData,
       code: code,
@@ -124,7 +128,7 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
           </button>
         </div>
         <div className="p-6 space-y-6">
-          <div className="grid grid-cols-6 gap-6">
+          <div className="p-inputgroup flex-1">
             <div className="col-span-6 sm:col-span-3">
               <label
                 htmlFor="code"
@@ -132,8 +136,8 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
               >
                 Code
               </label>
-              <input
-                type="text"
+              <InputText
+               variant="filled"               
                 name="code"
                 id="code"
                 className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -141,7 +145,7 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
                 required=""
                 value={formData.code}
                 onChange={handleChange}
-                readOnly={true}
+                disabled
               />
             </div>
             <div className="col-span-6 sm:col-span-3">
@@ -151,7 +155,7 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
               >
                 Name
               </label>
-              <input
+              <InputText
                 type="text"
                 name="name"
                 id="name"
@@ -170,7 +174,7 @@ const MenuCategoryCreate = ({ onDataAdded }) => {
                 htmlFor="active"
                 className="text-sm font-medium text-gray-900 block mb-2"
               >
-                <input
+                <Checkbox
                   checked
                   type="checkbox"
                   name="active"

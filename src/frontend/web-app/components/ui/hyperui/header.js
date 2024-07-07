@@ -29,7 +29,7 @@ const HyperHeader = () => {
           </li>
 
           <li>
-            <Link class="text-gray-500 transition hover:text-gray-500/75" href="#"> History </Link>
+            <Link class="text-gray-500 transition hover:text-gray-500/75" href="/order"> Order </Link>
           </li>
 
           <li>

@@ -5,7 +5,14 @@ import ApiHandler from "../../services/menucategory";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
 import "react-toastify/dist/ReactToastify.css";
-import "tailwindcss/tailwind.css";
+// import "tailwindcss/tailwind.css";
+import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';   
+import { Button } from 'primereact/button'; 
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+import { generateCode } from "@/utils/codeGenerator";
+
 
 const ItemCreate = ({ onDataAdded }) => {
   const router = useRouter();
@@ -38,12 +45,9 @@ const ItemCreate = ({ onDataAdded }) => {
     }
   };
 
-  const generateCode = async () => {
-    return `ITM-${(await getIndexCount()) + 1}`;
-  };
-
   const setCode = async () => {
-    const code = await generateCode();
+    const tableId = await getIndexCount() + 1  
+    const code = await generateCode('ITM',tableId);
     setFormData((prevData) => ({
       ...prevData,
       code: code,
@@ -134,6 +138,7 @@ const ItemCreate = ({ onDataAdded }) => {
 
   return (
     <>
+    <PrimeReactProvider>
       <div className="container max-w-screen-lg mx-auto">
         <ToastContainer />
         <div className="bg-white border border-1 rounded-lg shadow relative m-10">
@@ -244,12 +249,12 @@ const ItemCreate = ({ onDataAdded }) => {
             </div>
           </div>
           <div className="flex justify-between p-6 border-t border-gray-200 rounded-b">
-            <button
-              className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            <Button
+             
               onClick={handleSubmit}
             >
               Submit
-            </button>
+            </Button>
             <button
               className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               onClick={handleReset}
@@ -259,6 +264,7 @@ const ItemCreate = ({ onDataAdded }) => {
           </div>
         </div>
       </div>
+      </PrimeReactProvider>
     </>
   );
 };
