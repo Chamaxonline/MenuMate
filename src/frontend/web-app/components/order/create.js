@@ -145,7 +145,7 @@ const OrderCreate = () => {
                     data-pc-section="label"
                     onClick={handleSubmit}
                   >
-                    Danger
+                    Save
                   </span>
                 </button>{" "}
               </div>
