@@ -11,6 +11,7 @@ namespace Entity.Models
     public class Order : BaseEntity
     {
         public required string Code { get; set; }
+        public OrderType Type { get; set; }
         public required OrderStatus Status { get; set; }
     }
 }
