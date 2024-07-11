@@ -1,22 +1,16 @@
-import { useState, useEffect } from "react";
+import React,{ useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import ItemService from "../../services/item";
 import ApiHandler from "../../services/menucategory";
 import { ToastContainer, toast } from "react-toastify";
-import Select from "react-select";
 import "react-toastify/dist/ReactToastify.css";
-// import "tailwindcss/tailwind.css";
-import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';   
-import { Button } from 'primereact/button'; 
-import 'primereact/resources/themes/saga-blue/theme.css';
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
+import { Checkbox } from "primereact/checkbox";
 import { generateCode } from "@/utils/codeGenerator";
-
+import { AutoComplete } from "primereact/autocomplete";
 
 const ItemCreate = ({ onDataAdded }) => {
   const router = useRouter();
-  const [apiData, setApiData] = useState([]);
+  const [categories, setApiData] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     code: "",
@@ -27,6 +21,9 @@ const ItemCreate = ({ onDataAdded }) => {
   const [api] = useState(new ItemService());
   const [menuService] = useState(new ApiHandler());
   const [errors, setErrors] = useState({});
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [filteredItems, setFilteredItems] = useState(null);
+
 
   useEffect(() => {
     setCode();
@@ -46,13 +43,27 @@ const ItemCreate = ({ onDataAdded }) => {
   };
 
   const setCode = async () => {
-    const tableId = await getIndexCount() + 1  
-    const code = await generateCode('ITM',tableId);
+    const tableId = (await getIndexCount()) + 1;
+    const code = await generateCode("ITM", tableId);
     setFormData((prevData) => ({
       ...prevData,
       code: code,
     }));
   };
+
+  const searchItems = (event) => {
+    let query = event.query.toLowerCase();
+    let _filteredItems = [];
+
+    for (let i = 0; i < categories.length; i++) {
+        let category = categories[i];
+        if (category.name.toLowerCase().includes(query)) {
+            _filteredItems.push({ label: category.name, value: category.id });
+        }
+    }
+    setFilteredItems(_filteredItems);
+}
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -129,8 +140,9 @@ const ItemCreate = ({ onDataAdded }) => {
       name: "",
       code: "",
       active: false,
-      category:null
+      category: null,
     });
+    setSelectedItem(null);
     setErrors({});
     fetchData();
     setCode();
@@ -138,53 +150,32 @@ const ItemCreate = ({ onDataAdded }) => {
 
   return (
     <>
-    <PrimeReactProvider>
-      <div className="container max-w-screen-lg mx-auto">
-        <ToastContainer />
-        <div className="bg-white border border-1 rounded-lg shadow relative m-10">
-          <div className="flex items-start justify-between p-5 border-b rounded-t">
-            <h3 className="text-xl font-semibold">Create Item</h3>
-            <button
-              type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-              data-modal-toggle="product-modal"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 011.414 1.414L11.414 10l4.293 4.293a1 1 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-            </button>
-          </div>
-          <div className="p-6 space-y-6">
-            <div className="grid grid-cols-6 gap-6">
-              <div className="col-span-6 sm:col-span-3">
-                <label
-                  htmlFor="code"
-                  className="text-sm font-medium text-gray-900 block mb-2"
-                >
-                  Code
-                </label>
+      <div className="grid">
+        <div className="col-12 md:col-12">
+          <div className="card p-fluid">
+            <ToastContainer />
+
+            <div className="flex items-start justify-between p-5 border-b rounded-t">
+              <h3 className="text-xl font-semibold">Create Item</h3>
+            </div>
+
+            <div className="formgrid grid">
+              <div className="field col">
+                <label htmlFor="code">Code</label>
                 <input
                   type="text"
                   name="code"
                   id="code"
-                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                  placeholder="Apple Imac 27”"
+                  className="p-inputtext p-component"
+                  data-pc-name="inputtext"
+                  data-pc-section="root"
                   required=""
                   value={formData.code}
                   onChange={handleChange}
                   readOnly={true}
                 />
               </div>
-              <div className="col-span-6 sm:col-span-3">
+              <div className="field col">
                 <label
                   htmlFor="name"
                   className="text-sm font-medium text-gray-900 block mb-2"
@@ -195,7 +186,9 @@ const ItemCreate = ({ onDataAdded }) => {
                   type="text"
                   name="name"
                   id="name"
-                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  className="p-inputtext p-component"
+                  data-pc-name="inputtext"
+                  data-pc-section="root"
                   placeholder="Name"
                   required=""
                   value={formData.name}
@@ -205,38 +198,35 @@ const ItemCreate = ({ onDataAdded }) => {
                   <p className="text-sm text-red-600 mt-1">{errors.name}</p>
                 )}
               </div>
-              <div className="col-span-6 sm:col-span-3">
-                <label
-                  htmlFor="category"
-                  className="block text-gray-700 font-medium mb-2"
-                >
-                  Category
-                </label>
-                <Select
-                  id="category"
-                  name="category"
-                  options={apiData.map((item) => ({
-                    value: item.id,
-                    label: item.name,
-                  }))}
-                  value={formData.category}
-                  onChange={handleCategoryChange}
-                  placeholder="Select a category"
-                  className="border border-gray-400 rounded-lg focus:outline-none focus:border-blue-400"
-                />
+            </div>
+            <div className="formgrid grid">
+              <div className="field col-6">
+                <label htmlFor="category">Category</label>
+                <AutoComplete 
+            value={selectedItem} 
+            suggestions={filteredItems} 
+            completeMethod={searchItems}
+            virtualScrollerOptions={{ itemSize: 38 }} 
+            field="label" 
+            dropdown 
+            placeholder= 'Select a category'
+            onChange={(e) => {
+              setSelectedItem(e.value);
+              handleCategoryChange(e.value);
+            }} 
+        />
                 {errors.categoryId && (
                   <p className="text-sm text-red-600 mt-1">
                     {errors.categoryId}
                   </p>
                 )}
               </div>
-              <div className="col-span-6 sm:col-span-3">
-                <label
-                  htmlFor="active"
-                  className="text-sm font-medium text-gray-900 block mb-2"
-                >
-                  <input
-                    checked={formData.active}
+            </div>
+            <div className="formgrid grid">
+              <div className="field col-6">
+                <label htmlFor="active">
+                  <Checkbox
+                    checked
                     type="checkbox"
                     name="active"
                     id="active"
@@ -247,24 +237,43 @@ const ItemCreate = ({ onDataAdded }) => {
                 </label>
               </div>
             </div>
-          </div>
-          <div className="flex justify-between p-6 border-t border-gray-200 rounded-b">
-            <Button
-             
-              onClick={handleSubmit}
-            >
-              Submit
-            </Button>
-            <button
-              className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              onClick={handleReset}
-            >
-              Reset
-            </button>
+            <div className="formgrid grid">
+              <div className="col-1 md:col-1">
+                <button
+                  aria-label="Danger"
+                  class="p-button p-component "
+                  data-pc-name="button"
+                  data-pc-section="root"
+                >
+                  <span
+                    class="p-button-label p-c"
+                    data-pc-section="label"
+                    onClick={handleSubmit}
+                  >
+                    Save
+                  </span>
+                </button>{" "}
+              </div>
+              <div className="col-1 md:col-1">
+                <button
+                  aria-label="Danger"
+                  class="p-button p-component p-button-secondary"
+                  data-pc-name="button"
+                  data-pc-section="root"
+                >
+                  <span
+                    class="p-button-label p-c"
+                    data-pc-section="label"
+                    onClick={handleReset}
+                  >
+                    Reset
+                  </span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      </PrimeReactProvider>
     </>
   );
 };

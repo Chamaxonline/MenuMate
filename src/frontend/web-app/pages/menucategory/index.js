@@ -1,13 +1,17 @@
+import React from "react";
 import MenuCategoryCreate from "../../components/menucategory/create";
 import { useState, useEffect } from "react";
 import ApiHandler from "../../services/menucategory";
 import DataTable from "react-data-table-component";
 import EditModal from "@/components/menucategory/editmodal";
 import { PrimeReactProvider, PrimeReactContext } from 'primereact/api'; 
+import RootLayout from '@/components/layout';
+import { Column } from 'primereact/column';
+
 
 const MenuCategoryPage = () => {
-  const [api] = useState(new ApiHandler());
-  const [apiData, setApiData] = useState([]);
+  const [categoryServer] = useState(new ApiHandler());
+  const [categoryData,setCategory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -16,7 +20,7 @@ const MenuCategoryPage = () => {
     setLoading(true);
     try {
       const data = await api.getAll();
-      setApiData(data);
+      setCategory(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -41,7 +45,7 @@ const MenuCategoryPage = () => {
 
   useEffect(() => {
     fetchData();
-  }, [api]);
+  }, [categoryServer]);
 
   const handleDataAdded = () => {
     fetchData(); // Refresh data after new data is added
@@ -59,10 +63,23 @@ const MenuCategoryPage = () => {
 
   return (
     <>
-     <PrimeReactProvider>
+    <React.StrictMode>
+     <RootLayout>
+
+    
       <div className="container max-w-screen-lg mx-auto">
         <MenuCategoryCreate onDataAdded={handleDataAdded} />
-        <div className="bg-white border border-1 rounded-lg shadow relative m-10">
+        <div className="card">
+            <DataTable value={categoryData} paginator rows={10} rowsPerPageOptions={[5, 10, 25, 50]}  sortField="id" sortOrder={-1} tableStyle={{ minWidth: '50rem' }}>
+                <Column field="code" header="Code" sortable style={{ width: '20%' }}></Column>
+                <Column field="name" header="Name" sortable style={{ width: '20%' }}></Column>
+                {/* <Column field="price" header="Price" body={priceBodyTemplate} sortable style={{ width: '20%' }}></Column> */}
+                 {/* <Column field="category.name" header="Category" sortable style={{ width: '20%' }}></Column> */}
+               {/* <Column field="quantity" header="Quantity" sortable style={{ width: '20%' }}></Column> */}
+            </DataTable>
+        </div>
+
+        {/* <div className="bg-white border border-1 rounded-lg shadow relative m-10">
           <DataTable
             columns={columns}
             data={apiData}
@@ -72,7 +89,7 @@ const MenuCategoryPage = () => {
               <div class="w-36 h-36 border-8 rounded-full border-t-lime-400 animate-spin" />
             }
           />
-        </div>
+        </div> */}
       </div>
      
       <EditModal
@@ -81,7 +98,8 @@ const MenuCategoryPage = () => {
         categoryData={selectedCategory}
         onCategoryUpdated={fetchData}
       />
-      </PrimeReactProvider>
+      </RootLayout>
+      </React.StrictMode>
     </>
   );
 };

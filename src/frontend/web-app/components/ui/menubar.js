@@ -21,63 +21,24 @@ export default function MenuBar() {
     );
     const items = [
         {
-            label: 'Home',
-            icon: 'pi pi-home'
+            label: 'Dashboard',
+            icon: 'pi pi-desktop',
+            url:'/home'
         },
         {
-            label: 'Features',
-            icon: 'pi pi-star'
+            label: 'Category',
+            icon: 'pi pi-building',
+            url:'/menucategory'
         },
         {
-            label: 'Projects',
-            icon: 'pi pi-search',
-            items: [
-                {
-                    label: 'Core',
-                    icon: 'pi pi-bolt',
-                    shortcut: '⌘+S',
-                    template: itemRenderer
-                },
-                {
-                    label: 'Blocks',
-                    icon: 'pi pi-server',
-                    shortcut: '⌘+B',
-                    template: itemRenderer
-                },
-                {
-                    label: 'UI Kit',
-                    icon: 'pi pi-pencil',
-                    shortcut: '⌘+U',
-                    template: itemRenderer
-                },
-                {
-                    separator: true
-                },
-                {
-                    label: 'Templates',
-                    icon: 'pi pi-palette',
-                    items: [
-                        {
-                            label: 'Apollo',
-                            icon: 'pi pi-palette',
-                            badge: 2,
-                            template: itemRenderer
-                        },
-                        {
-                            label: 'Ultima',
-                            icon: 'pi pi-palette',
-                            badge: 3,
-                            template: itemRenderer
-                        }
-                    ]
-                }
-            ]
+            label: 'Item',
+            icon: 'pi pi-shop',
+            url:'/item'   
         },
         {
-            label: 'Contact',
-            icon: 'pi pi-envelope',
-            badge: 3,
-            template: itemRenderer
+            label: 'Order',
+            icon: 'pi pi-wallet',
+            url:'/order',
         }
     ];
 
