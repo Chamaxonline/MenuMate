@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import ItemService from "../../services/item";
 import ItemCreate from "@/components/item/create";
-import HyperHeader from "@/components/ui/hyperui/header";
-import HyperFooter from "@/components/ui/hyperui/footer";
-import DataTable from "react-data-table-component";
 import EditItemModal from "@/components/item/editmodal";
-import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';   
-import { Button } from 'primereact/button';   
+import RootLayout from "@/components/layout";
+import { DataTable } from 'primereact/datatable';
+import { Column } from "primereact/column";
+import "primeicons/primeicons.css";
+import "primeflex/primeflex.css";
+import "primereact/resources/primereact.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+
 
 const ItemCreatePage = () => {
   const [api] = useState(new ItemService());
-  const [apiData, setApiData] = useState([]);
+  const [items, setApiData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -64,29 +67,25 @@ const ItemCreatePage = () => {
   
   return (
     <>
-    
-      <div className="container max-w-screen-lg mx-auto">
-      <PrimeReactProvider></PrimeReactProvider>
-        
+    <RootLayout>
         <ItemCreate onDataAdded={handleDataAdded} />
-        <div className="bg-white border border-1 rounded-lg shadow relative m-10">
-          <DataTable
-            columns={columns}
-            data={apiData}
-            pagination
-            progressPending={loading}
-            progressComponent={
-              <div class="w-36 h-36 border-8 rounded-full border-t-lime-400 animate-spin" />
-            }
-          />
+        <div className="card">
+            <DataTable value={items} paginator rows={10} rowsPerPageOptions={[5, 10, 25, 50]}  sortField="id" sortOrder={-1} tableStyle={{ minWidth: '50rem' }}>
+                <Column field="code" header="Code" sortable style={{ width: '20%' }}></Column>
+                <Column field="name" header="Name" sortable style={{ width: '20%' }}></Column>
+                {/* <Column field="price" header="Price" body={priceBodyTemplate} sortable style={{ width: '20%' }}></Column> */}
+                 <Column field="category.name" header="Category" sortable style={{ width: '20%' }}></Column>
+                <Column field="id" header="Edit" sortable style={{ width: '20%' }}></Column> 
+            </DataTable>
         </div>
-      </div>
+      
       <EditItemModal
         isOpen={isEditModalOpen}
         onClose={handleModalClose}
         itemData={selectedItem}
         onItemUpdated={fetchData}
       />
+      </RootLayout>
     </>
   );
 };
