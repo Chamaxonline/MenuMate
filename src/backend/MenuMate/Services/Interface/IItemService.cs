@@ -13,5 +13,6 @@ namespace Services.Interface
         Task<Item> Get(int id);
         Task<IEnumerable<Item>> GetAll();
         Task<int> GetLastId();
+        void Delete(Item item);
     }
 }

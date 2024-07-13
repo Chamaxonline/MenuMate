@@ -51,5 +51,13 @@ namespace WebAPI.Controllers
         {
             return Ok(await _service.GetLastId());
         }
+
+        [HttpDelete]
+        [Route("Delete")]
+        public async Task<IActionResult> Delete(ItemVM itemVM)
+        {
+            _service.Delete(_mapper.Map<Item>(itemVM));
+            return Ok("Item deleted successfully");
+        }
     }
 }

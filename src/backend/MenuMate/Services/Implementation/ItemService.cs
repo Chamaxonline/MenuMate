@@ -36,5 +36,11 @@ namespace Services.Implementation
         {
             return await _repository.GetLastId();
         }
+
+        public void Delete(Item item)
+        {
+            _repository.Remove(item);
+        }
+
     }
 }
