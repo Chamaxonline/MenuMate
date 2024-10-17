@@ -16,22 +16,24 @@ namespace TestMenuMate.ServiceTest
     {
         private Mock<IMenuCategoryRepository> _repositoryMock;
         private IMenuCategoryService _serviceMock;
+        private IItemRepository _itemRepositoryMock;
 
         public MenuCategoryServiceTests()
         {
             _repositoryMock = new Mock<IMenuCategoryRepository>();
-            _serviceMock = new MenuCategoryService(_repositoryMock.Object);
+            _serviceMock = new MenuCategoryService(_repositoryMock.Object,_itemRepositoryMock);
         }
 
         [Theory]
-        [InlineData("indian","system@gmail.com","indian", "system@gmail.com", true)]
-        public async Task Add_ValidMenuCategory_ReturnsAddedMenuCategory(string name1, string createdUser1, string name2, string createdUser2,bool expected)
+        [InlineData("indian","AC001","system@gmail.com","indian","AC002", "system@gmail.com", true)]
+        public async Task Add_ValidMenuCategory_ReturnsAddedMenuCategory(string name1,string code1, string createdUser1, string name2,string code2, string createdUser2,bool expected)
         {
            
 
             var menuCategoryToAdd = new MenuCategory
             {
                 Name = name1,
+                Code = code1,
                 Active = true,
                 CreatedDate = DateTime.Now,
                 CreatedBy = createdUser1
@@ -40,6 +42,7 @@ namespace TestMenuMate.ServiceTest
             var addedMenuCategory = new MenuCategory
             {
                 Name = name2,
+                Code = code2,
                 Active = true,
                 CreatedDate = DateTime.Now,
                 CreatedBy = createdUser2

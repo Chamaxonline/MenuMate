@@ -11,8 +11,14 @@ namespace Entity.Context
         public MenuDbContext(DbContextOptions<MenuDbContext> options) : base(options)
         { }
 
-        public DbSet<MenuCategory> MenuCategory { get; set; }        
-       
+        public DbSet<MenuCategory> MenuCategory { get; set; }
+        public DbSet<Item> Item { get; set; }
+        public DbSet<Order> Order { get; set; }
+
+        public DbSet<OrderDetail> OrderDetail { get; set; }
+
+
+
 
     }
 }

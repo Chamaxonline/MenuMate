@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Entity.Models
 {
-    public class MenuCategory:BaseEntity
+    public class MenuCategory : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-        public string Name  { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
         public bool Active { get; set; }
+        public ICollection<Item> Items { get; set; }
     }
 }

@@ -8,6 +8,6 @@ namespace Repository.Interfaces
 {
     public interface IMenuCategoryRepository : IAsyncRepository<MenuCategory>
     {
-       
+        Task<int> GetLastId();
     }
 }

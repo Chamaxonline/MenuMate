@@ -29,6 +29,7 @@ namespace Repository.Implementation
 
         public async Task<T> GetById(int id)
         {
+            //return await Context.Set<T>().FindAsync(id);
             return await Context.Set<T>().FindAsync(id);
         }
 
@@ -45,11 +46,24 @@ namespace Repository.Implementation
 
         public async Task<T> Update(T entity)
         {
-            // In case AsNoTracking is used
-            Context.Entry(entity).State = EntityState.Modified;
-             Context.SaveChangesAsync();
-            return await Task.FromResult(entity);
+            var oldRecord = await Context.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == entity.Id);
+            if (oldRecord != null)
+            {
+                entity.CreatedDate = oldRecord.CreatedDate;
+                entity.CreatedBy = oldRecord.CreatedBy;
+            }
+            entity.LastUpdatedDate = DateTime.Now;
+            var local = Context.Set<T>().Local.FirstOrDefault(entry => entry.Id.Equals(entity.Id));
+            if (local != null)
+            {
+                Context.Entry(local).State = EntityState.Detached;
+            }
 
+            Context.Set<T>().Attach(entity);
+            Context.Entry(entity).State = EntityState.Modified;
+            await Context.SaveChangesAsync();
+
+            return entity;
         }
 
         public Task Remove(T entity)
@@ -72,13 +86,6 @@ namespace Repository.Implementation
 
         public Task<int> CountWhere(Expression<Func<T, bool>> predicate)
             => Context.Set<T>().CountAsync(predicate);
-
-        //public async Task<T> IAsyncRepository<T>.Add(T entity)
-        //{
-        //   var response =  await Context.Set<T>().AddAsync(entity);
-        //    await Context.SaveChangesAsync();
-        //    return response;
-        //}
 
         #endregion
 
