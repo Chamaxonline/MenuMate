@@ -13,9 +13,8 @@ namespace Entity
         public string CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         [Required]
-        [DefaultValue(typeof(DateTime), "getdate()")]
+        public DateTime CreatedDate { get; set; } = DateTime.Now; // Default value set in code
 
-        public DateTime CreatedDate { get; set; }
         public DateTime? LastUpdatedDate { get; set; }
 
 
